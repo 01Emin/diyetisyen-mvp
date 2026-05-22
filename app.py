@@ -7,7 +7,9 @@ st.set_page_config(page_title="Dijital Diyetisyen Asistanı", layout="centered")
 st.title("🍏 Dijital Diyetisyen Asistanı (MVP)")
 
 st.sidebar.header("⚙️ Sistem Ayarları")
-api_key = st.sidebar.text_input("Gemini API Key", type="password")
+api_key = st.secrets["GEMINI_API_KEY"]
+genai.configure(api_key=api_key)
+
 
 # Güvenlik ve Sistem Kuralları
 system_instruction = """
@@ -64,4 +66,4 @@ if api_key:
                 response = st.session_state.chat_session.send_message(user_input)
                 st.markdown(response.text)
 else:
-    st.warning("👈 Lütfen sol menüye Gemini API Key'ini gir.")
+    st.warning("Siz davet edilmediniz.")
