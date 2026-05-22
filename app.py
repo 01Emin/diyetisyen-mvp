@@ -52,13 +52,13 @@ if not st.session_state.logged_in:
             
             if submitted:
                 # Sabit Şifreli Test Girişleri (Veritabanı Yokken)
-                if username_input == "kullanici" and password_input == "user123":
+                if username_input == "demo" and password_input == "demo123":
                     st.session_state.logged_in = True
                     st.session_state.role = "kullanici"
                     st.session_state.username = username_input
                     st.success("Kullanıcı girişi başarılı!")
                     st.rerun()
-                elif username_input == "diyetisyen" and password_input == "diet123":
+                elif username_input == "demo" and password_input == "demo1234":
                     st.session_state.logged_in = True
                     st.session_state.role = "diyetisyen"
                     st.session_state.username = username_input
