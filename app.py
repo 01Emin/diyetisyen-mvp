@@ -62,7 +62,7 @@ if not st.session_state.logged_in:
             
             username_input = st.text_input("Kullanıcı Adı", placeholder="Kullanıcı adınızı girin...")
             password_input = st.text_input("Şifre", type="password", placeholder="Şifrenizi girin...")
-            submitted = st.form_submit_submit("Giriş Yap", use_container_width=True)
+            submitted = st.form_submit_button("Giriş Yap", use_container_width=True)  # ✅ DÜZELTİLDİ
             
             if submitted:
                 if username_input == "kullanıcı" and password_input == "kullanıcı123":
@@ -128,7 +128,7 @@ if st.session_state.role == "kullanici":
             
             if uploaded_file is not None:
                 image = Image.open(uploaded_file)
-                st.image(image, caption="Yüklenen Öğün", use_container_width=True, clamp=True)
+                st.image(image, caption="Yüklenen Öğün", use_container_width=True)
 
         with col_res:
             if uploaded_file is not None:
@@ -221,33 +221,34 @@ elif st.session_state.role == "diyetisyen":
     with tab1:
         st.subheader("Aktif Danışanlarınız")
         
-        # Daha profesyonel tablo (Pandas DataFrame ile)
+        # ✅ İSİMLER GÜNCELLENDİ
         df_users = pd.DataFrame({
-            "Danışan Adı Soyadı": ["Emin Kaya", "Esat Talha", "İbrahim", "Eyüp"],
-            "Kayıt Tarihi": ["01.08.2023", "15.08.2023", "10.09.2023", "12.09.2023"],
-            "Hedef": ["Kilo Verme", "Kas Geliştirme", "Kilo Koruma", "Kilo Verme"],
-            "Başlangıç (kg)": [90, 55, 65, 105],
-            "Güncel (kg)": [85, 57, 64.5, 99],
-            "Uyum Skoru": ["🟢 %90", "🟡 %75", "🟢 %88", "🔴 %45"]
+            "Danışan Adı Soyadı": ["Emin", "Esat", "İbrahim", "Eyüp", "Sami"],
+            "Kayıt Tarihi": ["01.08.2023", "15.08.2023", "10.09.2023", "12.09.2023", "05.10.2023"],
+            "Hedef": ["Kilo Verme", "Kas Geliştirme", "Kilo Koruma", "Kilo Verme", "Sağlıklı Yaşam"],
+            "Başlangıç (kg)": [90, 55, 65, 105, 78],
+            "Güncel (kg)": [85, 57, 64.5, 99, 76.5],
+            "Uyum Skoru": ["🟢 %90", "🟡 %75", "🟢 %88", "🔴 %45", "🟢 %82"]
         })
         st.dataframe(df_users, use_container_width=True, hide_index=True)
         
         st.divider()
         
-        st.subheader("🔎 Detaylı Danışan Profili: Emin Kaya")
+        # ✅ Emin detayı korundu, istenirse diğerleri için de eklenebilir
+        st.subheader("🔎 Detaylı Danışan Profili: Emin")
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("Mevcut Kilo", "85 kg", "-5 kg (Toplam)")
         c2.metric("Hedef Kilo", "78 kg")
         c3.metric("Günlük Kalori Hedefi", "2100 kcal")
         c4.metric("Su Tüketimi", "2.5 Litre", "Hedefe Uygun")
         
-        st.info("💡 **Diyetisyen Notu:** Emin Bey son 2 haftadır antrenman öncesi karbonhidrat alımını ihmal ediyor. Bir sonraki görüşmede hatırlatılacak.")
+        st.info("💡 **Diyetisyen Notu:** Emin son 2 haftadır antrenman öncesi karbonhidrat alımını ihmal ediyor. Bir sonraki görüşmede hatırlatılacak.")
 
     with tab2:
         st.subheader("Kullanıcıların AI Destekli Son Öğün Analizleri")
         st.write("Sistemdeki danışanların gün içinde yükledikleri öğünleri ve AI'nin verdiği geri bildirimleri buradan denetleyebilirsiniz.")
         
-        with st.expander("📸 Emin Kaya - Kahvaltı (Bugün 09:15)", expanded=True):
+        with st.expander("📸 Emin - Kahvaltı (Bugün 09:15)", expanded=True):
             col_a, col_b = st.columns([1, 3])
             with col_a:
                 st.image("https://images.unsplash.com/photo-1525385133512-2f3bdd039054?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80", caption="Yulaf ve Meyve")
@@ -256,11 +257,11 @@ elif st.session_state.role == "diyetisyen":
                 st.markdown("**AI Yorumu:** Harika bir enerji kaynağı! Ancak protein miktarını artırmak için yanına 1 adet haşlanmış yumurta eklenebilir.")
                 st.button("Diyetisyen Olarak Yorum Yap", key="btn_emin")
 
-        with st.expander("📸 Ayşe Demir - Öğle Yemeği (Dün 13:30)"):
+        with st.expander("📸 Esat - Öğle Yemeği (Dün 13:30)"):
             col_a, col_b = st.columns([1, 3])
             with col_a:
                 st.image("https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80", caption="Karışık Salata")
             with col_b:
                 st.markdown("**AI Analizi:** ~200 kcal, 5g Protein, 20g Karbonhidrat, 10g Yağ.")
-                st.markdown("**AI Yorumu:** Çok hafif bir öğün, ancak Ayşe Hanım'ın kas geliştirme hedefine (57kg) göre protein çok yetersiz. Tavuk veya ton balığı eklenmeli.")
-                st.button("Diyetisyen Olarak Yorum Yap", key="btn_ayse")
+                st.markdown("**AI Yorumu:** Çok hafif bir öğün, ancak Esat'ın kas geliştirme hedefine (57kg) göre protein çok yetersiz. Tavuk veya ton balığı eklenmeli.")
+                st.button("Diyetisyen Olarak Yorum Yap", key="btn_esat")
