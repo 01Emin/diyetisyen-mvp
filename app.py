@@ -3,7 +3,7 @@ import google.generativeai as genai
 from PIL import Image
 
 # 1. SAYFA AYARLARI
-st.set_page_config(page_title="Dijital Diyetisyen", layout="wide")
+st.set_page_config(page_title="AIDijital Diyetisyen", layout="wide")
 
 # 2. GİZLİ ŞİFREYİ ALMA VE MODELİ BAŞLATMA
 try:
