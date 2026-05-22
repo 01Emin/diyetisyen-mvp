@@ -3,7 +3,7 @@ import google.generativeai as genai
 from PIL import Image
 
 # 1. SAYFA AYARLARI
-st.set_page_config(page_title="Dijital Diyetisyen", page_icon="🍏", layout="wide")
+st.set_page_config(page_title="Dijital Diyetisyen", layout="wide")
 
 # 2. GİZLİ ŞİFREYİ ALMA VE MODELİ BAŞLATMA
 try:
@@ -31,7 +31,7 @@ with st.sidebar:
 # 4. ŞIK ÜST BANNER TASARIMI (CSS ile)
 st.markdown("""
     <div style='background-color:#2c3e50;padding:20px;border-radius:10px;margin-bottom:25px;'>
-        <h1 style='color:white;margin:0;'>🍏 Dijital Diyetisyen Asistanı</h1>
+        <h1 style='color:white;margin:0;'> Dijital Diyetisyen Asistanı</h1>
         <p style='color:#cbd5e0;margin:5px 0 0 0;'>Yapay Zeka Destekli Klinik Beslenme Analizi ve Danışmanlık</p>
     </div>
 """, unsafe_allow_html=True)
@@ -81,7 +81,7 @@ with tab1:
                     except Exception as e:
                         st.error("Analiz sırasında bir sorun oluştu. Lütfen fotoğrafı değiştirip tekrar deneyin.")
         else:
-            st.info("👈 Analize başlamak için lütfen sol taraftan bir yemek fotoğrafı yükleyin.")
+            st.info(" Analize başlamak için lütfen sol taraftan bir yemek fotoğrafı yükleyin.")
 
 # --- İKİNCİ SEKME: CHATBOT ---
 with tab2:
