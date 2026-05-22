@@ -19,7 +19,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # 4. SEKMELİ YAPI (TABS)
-tab1, tab2 = st.tabs(["📸 Akıllı Öğün Analizörü", "💬 Diyetisyene Danış"])
+with tab2:
+st.subheader("Uzman Diyetisyeninizle Görüşün")
 
 # --- BİRİNCİ SEKME: FOTOĞRAF ANALİZİ ---
 with tab1:
