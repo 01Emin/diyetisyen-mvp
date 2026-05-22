@@ -4,7 +4,7 @@ from PIL import Image
 import json
 
 # 1. SAYFA AYARLARI
-st.set_page_config(page_title="ProNutri AI - Dashboard", page_icon="🍏", layout="wide")
+st.set_page_config(page_title="Aı Dijital Diyetisyen Asistanı - Dashboard", layout="wide")
 
 # 2. GİZLİ ŞİFREYİ ALMA VE MODELİ BAŞLATMA
 try:
@@ -75,7 +75,7 @@ if not st.session_state.logged_in:
 # 5a. ŞIK ÜST BANNER (Ortak)
 st.markdown("""
     <div style='background-color:#2c3e50;padding:20px;border-radius:10px;margin-bottom:25px;'>
-        <h1 style='color:white;margin:0;'>🍏 ProNutri AI Dashboard</h1>
+        <h1 style='color:white;margin:0;'>  Dijital Diyetisyen Aı  Dashboard</h1>
         <p style='color:#cbd5e0;margin:5px 0 0 0;'>Yapay Zeka Destekli Klinik Beslenme Portalı</p>
     </div>
 """, unsafe_allow_html=True)
