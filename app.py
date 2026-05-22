@@ -85,7 +85,7 @@ if not st.session_state.logged_in:
 # ==========================================
 with st.sidebar:
     st.image("https://cdn-icons-png.flaticon.com/512/3063/3063822.png", width=100)
-    st.title(f"Hoş geldiniz,")
+    st.title("Hoş geldiniz,")
     st.subheader(f"👋 {st.session_state.username}")
     
     rol_badge = "👨‍⚕️ Uzman Diyetisyen" if st.session_state.role == "diyetisyen" else "👤 Danışan"
@@ -107,7 +107,7 @@ with st.sidebar:
 # ==========================================
 # 6. ANA DASHBOARD İÇERİĞİ
 # ==========================================
-st.markdown(f'<p class="main-header">Gösterge Paneli</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-header">Gösterge Paneli</p>', unsafe_allow_html=True)
 
 # ------------------------------------------------------------------------------
 # 6A. KULLANICI (DANIŞAN) EKRANI
@@ -254,7 +254,7 @@ elif st.session_state.role == "diyetisyen":
             with col_b:
                 st.markdown("**AI Analizi:** ~350 kcal, 12g Protein, 55g Karbonhidrat, 8g Yağ.")
                 st.markdown("**AI Yorumu:** Harika bir enerji kaynağı! Ancak protein miktarını artırmak için yanına 1 adet haşlanmış yumurta eklenebilir.")
-                st.button("Diyetisyen Olarak Yorum Yap", key="btn_ahmet")
+                st.button("Diyetisyen Olarak Yorum Yap", key="btn_emin")
 
         with st.expander("📸 Ayşe Demir - Öğle Yemeği (Dün 13:30)"):
             col_a, col_b = st.columns([1, 3])
