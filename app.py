@@ -26,7 +26,7 @@ with st.sidebar:
         "Aklınıza takılan tüm beslenme sorularını Diyetisyen Chatbot'a sorun."
     )
     st.divider()
-    st.caption("© 2026 Dijital Diyetisyen Asistanı MVP")
+    st.caption("© 2026 AıDijital Diyetisyen Asistanı MVP")
 
 # 4. ŞIK ÜST BANNER TASARIMI (CSS ile)
 st.markdown("""
@@ -37,7 +37,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # 5. SEKMELİ YAPI (TABS) - HATA BURADAYDI, DÜZELTİLDİ
-tab1, tab2 = st.tabs(["📸 Akıllı Öğün Analizörü", "💬 Diyetisyene Danış"])
+tab1, tab2 = st.tabs(["📸 Akıllı Öğün Analizörü", "💬 Aı Diyetisyene Danış"])
 
 # --- BİRİNCİ SEKME: FOTOĞRAF ANALİZİ ---
 with tab1:
