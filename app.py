@@ -30,7 +30,7 @@ try:
     # .streamlit/secrets.toml dosyanızda GEMINI_API_KEY = "sizin_anahtariniz" olmalı
     api_key = st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-1.5-pro')
 except Exception as e:
     st.warning("⚠️ API Anahtarı bulunamadı! Lütfen `.streamlit/secrets.toml` dosyanızı kontrol edin.")
     st.info("💡 Uygulamanın arayüzünü görebilmeniz için şu an 'Test Modu'nda çalışıyor (Yapay zeka yanıt vermeyecektir).")
