@@ -37,7 +37,7 @@ if not st.session_state.logged_in:
     # Giriş Ekranı Tasarımı
     st.markdown("""
         <div style='background-color:#2c3e50;padding:20px;border-radius:10px;margin-bottom:25px;'>
-            <h1 style='color:white;margin:0;'>🔐 ProNutri AI - Giriş Portalı</h1>
+            <h1 style='color:white;margin:0;'>🔐 Dijital Diyetisyen AI - Giriş Portalı</h1>
             <p style='color:#cbd5e0;margin:5px 0 0 0;'>Giriş yapmak için lütfen bilgilerinizi girin.</p>
         </div>
     """, unsafe_allow_html=True)
