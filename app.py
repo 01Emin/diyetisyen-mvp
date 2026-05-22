@@ -24,13 +24,13 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 2. API YAPILANDIRMASI
+# 2. API YAPILANDIRMASI (DOĞRU MODEL EKLENDİ)
 # ==========================================
 try:
-    # .streamlit/secrets.toml dosyanızda GEMINI_API_KEY = "sizin_anahtariniz" olmalı
     api_key = st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-pro')
+    # Dedektif modunda bulduğumuz, senin API anahtarına özel model adı:
+    model = genai.GenerativeModel('gemini-2.0-flash-001')
 except Exception as e:
     st.warning("⚠️ API Anahtarı bulunamadı! Lütfen `.streamlit/secrets.toml` dosyanızı kontrol edin.")
     st.info("💡 Uygulamanın arayüzünü görebilmeniz için şu an 'Test Modu'nda çalışıyor (Yapay zeka yanıt vermeyecektir).")
@@ -62,7 +62,7 @@ if not st.session_state.logged_in:
             
             username_input = st.text_input("Kullanıcı Adı", placeholder="Kullanıcı adınızı girin...")
             password_input = st.text_input("Şifre", type="password", placeholder="Şifrenizi girin...")
-            submitted = st.form_submit_button("Giriş Yap", use_container_width=True)  # ✅ DÜZELTİLDİ
+            submitted = st.form_submit_button("Giriş Yap", use_container_width=True) 
             
             if submitted:
                 if username_input == "kullanıcı" and password_input == "kullanıcı123":
@@ -102,6 +102,11 @@ with st.sidebar:
         st.session_state.logged_in = False
         st.session_state.role = None
         st.session_state.username = None
+        # Oturum verilerini temizle
+        if "chat_session" in st.session_state:
+            del st.session_state["chat_session"]
+        if "messages" in st.session_state:
+            del st.session_state["messages"]
         st.rerun()
 
 # ==========================================
@@ -165,7 +170,8 @@ if st.session_state.role == "kullanici":
             else:
                 st.info("👈 Analize başlamak için lütfen sol taraftan bir yemek fotoğrafı yükleyin.")
 
-with tab2:
+    # TAB 2: CHATBOT
+    with tab2:
         st.subheader("💬 AI Diyetisyeninize Danışın")
         
         if "messages" not in st.session_state:
@@ -182,39 +188,20 @@ with tab2:
                 st.markdown(prompt)
                 
             with st.chat_message("assistant"):
-                with st.spinner("Yazıyor..."):
-                    try:
-                        bot_instruction = f"Sen tecrübeli bir diyetisyensin. Soru: {prompt}"
-                        res = st.session_state.chat_session.send_message(bot_instruction)
-                        st.markdown(res.text)
-                        st.session_state.messages.append({"role": "assistant", "content": res.text})
-                    except Exception as e:
-                        st.error(f"Bir hata oluştu: {str(e)}")
-                        st.session_state.chat_session = model.start_chat(history=[])
-# TAB 2: SİSTEM TEŞHİS ARACI (DEDEKTİF MODU)
-    with tab2:
-        st.subheader("🛠️ Sistem Teşhis Ekranı")
-        st.write("Google'ın senin API anahtarınla hangi modellere izin verdiğini buluyoruz...")
-        
-        if st.button("🔍 İzin Verilen Modelleri Listele", type="primary"):
-            with st.spinner("Google'ın sunucularına bağlanılıyor..."):
-                try:
-                    calisan_modeller = []
-                    # Google'daki tüm modelleri tarıyoruz
-                    for m in genai.list_models():
-                        # Sadece "içerik üretebilen" modelleri filtreliyoruz
-                        if 'generateContent' in m.supported_generation_methods:
-                            calisan_modeller.append(m.name)
-                    
-                    st.success("✅ Bağlantı Başarılı! İşte sana izin verilen modeller:")
-                    # Modelleri alt alta listele
-                    for model_adi in calisan_modeller:
-                        st.code(model_adi)
-                        
-                    st.info("👆 Lütfen yukarıdaki listede yazan 'models/gemini...' ile başlayan isimlerden birini (veya listenin boş olup olmadığını) bana kopyala. Sorunu kökünden çözeceğiz!")
-                    
-                except Exception as e:
-                    st.error(f"🚨 Listeleme sırasında hata oluştu: {str(e)}")
+                if model:
+                    with st.spinner("Yazıyor..."):
+                        try:
+                            bot_instruction = f"Sen tecrübeli bir diyetisyensin. Soru: {prompt}"
+                            res = st.session_state.chat_session.send_message(bot_instruction)
+                            st.markdown(res.text)
+                            st.session_state.messages.append({"role": "assistant", "content": res.text})
+                        except Exception as e:
+                            st.error(f"Bir hata oluştu: {str(e)}")
+                            # Hata durumunda oturumu sıfırla ki kilitlenmesin
+                            st.session_state.chat_session = model.start_chat(history=[])
+                else:
+                    st.error("Sistem test modunda, mesaj gönderilemiyor.")
+
     # TAB 3: GELİŞİM GRAFİĞİ (Temsili Arayüz)
     with tab3:
         st.subheader("📈 Kilo ve Kalori Takibiniz")
