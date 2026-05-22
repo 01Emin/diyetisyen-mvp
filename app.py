@@ -165,17 +165,20 @@ if st.session_state.role == "kullanici":
             else:
                 st.info("👈 Analize başlamak için lütfen sol taraftan bir yemek fotoğrafı yükleyin.")
 
-    # TAB 2: CHATBOT
+ # TAB 2: CHATBOT (HATA KORUMALI GÜNCEL VERSİYON)
     with tab2:
         st.subheader("💬 AI Diyetisyeninize Danışın")
         st.write("Beslenme, diyet programınız veya kaloriler hakkında dilediğinizi sorun.")
         
+        # 1. Hafıza ve Chat Oturumunu Başlatma (Güvenli Yol)
         if "messages" not in st.session_state:
             st.session_state.messages = [{"role": "assistant", "content": f"Merhaba {st.session_state.username}! Bugün beslenme hedeflerine nasıl yardımcı olabilirim?"}]
+            
+        if "chat_session" not in st.session_state or st.session_state.chat_session is None:
             if model:
                 st.session_state.chat_session = model.start_chat(history=[])
 
-        # Mesajları göster
+        # 2. Önceki Mesajları Ekranda Gösterme
         chat_container = st.container(height=400)
         with chat_container:
             for message in st.session_state.messages:
@@ -183,8 +186,9 @@ if st.session_state.role == "kullanici":
                 with st.chat_message(message["role"], avatar=avatar_img):
                     st.markdown(message["content"])
 
-        # Kullanıcı girişi
+        # 3. Yeni Mesaj Gönderme ve Hata Yakalama (Kritik Çözüm)
         if user_prompt := st.chat_input("Sorunuzu buraya yazın (Örn: Spordan önce ne yemeliyim?)..."):
+            
             st.session_state.messages.append({"role": "user", "content": user_prompt})
             with chat_container:
                 with st.chat_message("user", avatar="👤"):
@@ -193,14 +197,26 @@ if st.session_state.role == "kullanici":
                 with st.chat_message("assistant", avatar="🤖"):
                     if model:
                         with st.spinner("Diyetisyeniniz yazıyor..."):
-                            bot_instruction = f"Sen tecrübeli, empatik ve motive edici bir klinik diyetisyensin. Sadece beslenme ve sağlık konularında profesyonelce cevap ver. Danışanın sorusu: {user_prompt}"
-                            response = st.session_state.chat_session.send_message(bot_instruction)
-                            st.markdown(response.text)
-                            st.session_state.messages.append({"role": "assistant", "content": response.text})
+                            bot_instruction = f"Sen tecrübeli, empatik ve motive edici bir klinik diyetisyensin. Danışanın sorusu: {user_prompt}"
+                            try:
+                                # Önce normal chat_session ile (hafızalı) deniyoruz
+                                response = st.session_state.chat_session.send_message(bot_instruction)
+                                st.markdown(response.text)
+                                st.session_state.messages.append({"role": "assistant", "content": response.text})
+                            
+                            except Exception as e:
+                                # EĞER 404 HATASI VERİRSE ÇÖKMESİN, B PLANI ÇALIŞSIN:
+                                try:
+                                    yedek_yanit = model.generate_content(bot_instruction)
+                                    st.markdown(yedek_yanit.text)
+                                    st.session_state.messages.append({"role": "assistant", "content": yedek_yanit.text})
+                                    
+                                    # Bozulan oturumu arka planda sessizce sıfırla ki sonraki soruda düzelsin
+                                    st.session_state.chat_session = model.start_chat(history=[])
+                                except Exception as e2:
+                                    st.error("Geçici bir bağlantı sorunu yaşandı. Lütfen sorunuzu tekrar sorun.")
                     else:
-                        error_msg = "Sistem şu anda test modunda. Yanıt üretilemiyor."
-                        st.markdown(error_msg)
-                        st.session_state.messages.append({"role": "assistant", "content": error_msg})
+                        st.error("API bağlantısı kurulamadı. Sistem test modunda.")
 
     # TAB 3: GELİŞİM GRAFİĞİ (Temsili Arayüz)
     with tab3:
