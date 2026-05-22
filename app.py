@@ -215,7 +215,30 @@ if st.session_state.role == "kullanici":
                                     st.error(f"🚨 Google API'den Gelen Gerçek Hata: {str(e2)}")
                     else:
                         st.error("API bağlantısı kurulamadı. Sistem test modunda.")
-
+# TAB 2: SİSTEM TEŞHİS ARACI (DEDEKTİF MODU)
+    with tab2:
+        st.subheader("🛠️ Sistem Teşhis Ekranı")
+        st.write("Google'ın senin API anahtarınla hangi modellere izin verdiğini buluyoruz...")
+        
+        if st.button("🔍 İzin Verilen Modelleri Listele", type="primary"):
+            with st.spinner("Google'ın sunucularına bağlanılıyor..."):
+                try:
+                    calisan_modeller = []
+                    # Google'daki tüm modelleri tarıyoruz
+                    for m in genai.list_models():
+                        # Sadece "içerik üretebilen" modelleri filtreliyoruz
+                        if 'generateContent' in m.supported_generation_methods:
+                            calisan_modeller.append(m.name)
+                    
+                    st.success("✅ Bağlantı Başarılı! İşte sana izin verilen modeller:")
+                    # Modelleri alt alta listele
+                    for model_adi in calisan_modeller:
+                        st.code(model_adi)
+                        
+                    st.info("👆 Lütfen yukarıdaki listede yazan 'models/gemini...' ile başlayan isimlerden birini (veya listenin boş olup olmadığını) bana kopyala. Sorunu kökünden çözeceğiz!")
+                    
+                except Exception as e:
+                    st.error(f"🚨 Listeleme sırasında hata oluştu: {str(e)}")
     # TAB 3: GELİŞİM GRAFİĞİ (Temsili Arayüz)
     with tab3:
         st.subheader("📈 Kilo ve Kalori Takibiniz")
